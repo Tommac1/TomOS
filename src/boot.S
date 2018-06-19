@@ -8,6 +8,9 @@
 	cbz 	x0, master		// Hang all non-primary CPU
 	b 		proc_hang
 
+proc_hang:
+	b 		proc_hang
+
 master:
 	adr		x0, bss_begin
 	adr 	x1, bss_end
@@ -15,4 +18,5 @@ master:
 	bl 		memzero
 
 	mov 	sp, #LOW_MEMORY
-	bl kernel_main
+	bl 		kernel_main
+	b 		proc_hang
