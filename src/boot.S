@@ -19,4 +19,4 @@ master:
 
 	mov 	sp, #LOW_MEMORY
 	bl 		kernel_main
-	b 		proc_hang
+	b 		proc_hang		// Should never be reached
