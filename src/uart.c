@@ -26,6 +26,27 @@ void uart_send_string(char *str)
         uart_send((char)str[i]);
 }
 
+void calculate_baud_rate()
+{
+    unsigned int ibrd;
+    unsigned int fbrd;
+    unsigned int temp;
+
+    // IBRD = floor(UART_FREQ / (16 * BAUD_RATE))
+    // FBRD = floor(remainder * 64 + 0.5)
+
+    ibrd = ((100 * UART_CLOCK_FREQ) / (16 * BAUD_RATE));
+    for (temp = 0; temp <= ibrd; temp += 100)
+        ; // find the highest 100x lower that ibrd
+    temp -= 100;
+
+    fbrd = (((ibrd - temp) * 64) + 50);
+
+    // resolution = 100
+    put32(UART_IBRD, ibrd / 100);
+    put32(UART_FBRD, fbrd / 100);
+}
+
 void uart_init(void)
 {
     unsigned int selector;
@@ -45,14 +66,9 @@ void uart_init(void)
     put32(GPPUDCLK0, 0);
 
     put32(UART_CR, 0);      // disable uart
+    calculate_baud_rate();  // ibrd and fbrd calculation
     put32(UART_ICR, 0x7FF); // clear interrupts
-    put32(UART_LCRH, 0);    // disable FIFO
-    // IBRD = floor(UART_FREQ / (16 * BAUD_RATE))
-    // IBRD = floor(3MHz / (16 * 115200)) = floor(1.628) = 1
-    put32(UART_IBRD, 1);
-    // FBRD = floor(remainder * 64 + 0.5)
-    // FBRD = floor(.628 * 64 + 0.5) = floor(40.692) = 40
-    put32(UART_FBRD, 40);
-    put32(UART_LCRH, UART_WLEN_8BIT | (1 << 4)); // 8bit word
+    put32(UART_LCRH, UART_LCRH_WLEN_8BIT | UART_LCRH_FEN); // enable FIFO and 8bit word
     put32(UART_CR, UART_CR_UARTEN | UART_CR_TXE | UART_CR_RXE); // enable uart
 }
+

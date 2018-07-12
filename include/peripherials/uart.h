@@ -2,6 +2,8 @@
 #define _P_UART_H
 
 #define BAUD_RATE       (115200)
+#define UART_CLOCK_FREQ (3000000)
+
 #define UART_BASE       (0x3F201000)
 
 #define UART_DR         (UART_BASE + 0x0)
@@ -30,7 +32,8 @@
 #define UART_FR_BUSY    (0x1 << 3)
 #define UART_FR_RXFE    (0x1 << 4)
 #define UART_FR_TXFF    (0x1 << 5)
-#define UART_WLEN_8BIT  (0x3 << 5)
+#define UART_LCRH_WLEN_8BIT  (0x3 << 5)
+#define UART_LCRH_FEN   (0x1 << 4)
 
 
 #endif /* _P_UART_H */ 
