@@ -1,5 +1,6 @@
 #include "uart.h"
 #include "utils.h"
+#include "printf.h"
 
 static volatile int UART_READY = 0;
 
@@ -14,13 +15,14 @@ void kernel_main(unsigned int procid)
     while (UART_READY == 0)
         ; // wait till uart ready
 
+    // initalize printf function with uart_send
+    printf_init(uart_send);
+
     // + 1 on delay because 1st core goes into endless loop
     // while multiplying delay time by 0 (1st core)
     delay((procid * 10000) + 1);
 
-    uart_send_string("Hello, from processor ");
-    uart_send(procid + '0');
-    uart_send_string("\r\n");
+    printf("Hello form processor %d\r\n", procid);
 
     if (procid == 0) {
         // 1st core responses on uart, rest are waiting
