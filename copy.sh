@@ -12,5 +12,6 @@ done
 
 sync
 
+beep
 echo "COPY FINISHED"
 

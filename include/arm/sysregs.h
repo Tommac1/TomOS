@@ -2,7 +2,7 @@
 #define _SYSREGS_H
 
 // ***************************************
-// SCTLR_EL1, System Control Register (EL1), Page 2654 of AArch64-Reference-Manual.
+// SCTLR_ELx, System Control Register
 // ***************************************+
 
 #define SCTLR_RESERVED          ((3 << 28) | (3 << 22) | (1 << 20) | (1 << 11))
@@ -17,7 +17,7 @@
                                   SCTLR_I_CACHE_DISABLED | SCTLR_D_CACHE_DISABLED)
 
 // ***************************************
-// HCR_EL2, Hypervisor Configuration Register (EL2), Page 2487 of AArch64-Reference-Manual.
+// HCR_ELx, Hypervisor Configuration Register
 // ***************************************
 
 #define HCR_RW                  (1 << 31)
@@ -25,7 +25,7 @@
 
 
 // ***************************************
-// SCR_EL3, Secure Configuration Register (EL3), Page 2648 of AArch64-Reference-Manual.
+// SCR_ELx, Secure Configuration Register
 // ***************************************
 
 #define SCR_RESERVED            (3 << 4)
@@ -35,11 +35,13 @@
 
 
 // ***************************************
-// SPSR_EL3, Saved Program Status Register (EL3) Page 389 of AArch64-Reference-Manual.
+// SPSR_ELx, Saved Program Status Register
 // ***************************************
 
 #define SPSR_MASK_ALL           (7 << 6)
 #define SPSR_EL1h               (5 << 0)
+#define SPSR_EL2h               (9 << 0)
+#define SPSR_FROM_AARCH64       (0 << 4)
 #define SPSR_VALUE              (SPSR_MASK_ALL | SPSR_EL1h)
 
 #endif /* _SYSREGS_H */
